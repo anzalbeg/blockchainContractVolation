@@ -161,6 +161,7 @@ func (t *SimpleChaincode) createAsset(stub shim.ChaincodeStubInterface, args []s
 
 func (t *SimpleChaincode) updateAsset(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
      _,erval:=t. createOrUpdateAsset(stub, args)
+	  fmt.Println("UpdateAsset method called ------->>>>>>", erval)
     return nil, erval
 }
 
