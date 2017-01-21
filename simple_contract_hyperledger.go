@@ -161,7 +161,7 @@ func (t *SimpleChaincode) createAsset(stub shim.ChaincodeStubInterface, args []s
 
 func (t *SimpleChaincode) updateAsset(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
      _,erval:=t. createOrUpdateAsset(stub, args)
-	  fmt.Println("UpdateAsset method called ------->>>>>>", erval)
+      fmt.Println("UpdateAsset method called ------->>>>>>", erval);
     return nil, erval
 }
 
@@ -172,7 +172,7 @@ func (t *SimpleChaincode) deleteAsset(stub shim.ChaincodeStubInterface, args []s
     var assetID string // asset ID
     var err error
     var stateIn AssetState
-
+	
     // validate input data for number of args, Unmarshaling to asset state and obtain asset id
     stateIn, err = t.validateInput(args)
     if err != nil {
@@ -292,17 +292,22 @@ func (t *SimpleChaincode) createOrUpdateAsset(stub shim.ChaincodeStubInterface, 
 
     stateIn, err = t.validateInput(args)
     if err != nil {
+        fmt.Println("error validateInput inside createOrUpdateAsset------",err);
         return nil, err
     }
     assetID = *stateIn.AssetID
+    fmt.Println("assetId inside createOrUpdateAsset------",assetID);
+	
     // Partial updates introduced here
     // Check if asset record existed in stub
     assetBytes, err:= stub.GetState(assetID)
     if err != nil || len(assetBytes)==0{
         // This implies that this is a 'create' scenario
          stateStub = stateIn // The record that goes into the stub is the one that cme in
+           fmt.Println("stateStub inside createOrUpdateAsset--------",stateStub);
     } else {
         // This is an update scenario
+        fmt.Println("assetBytes inside createOrUpdateAsset---updaet scenario-----",assetBytes);
         err = json.Unmarshal(assetBytes, &stateStub)
         if err != nil {
             err = errors.New("Unable to unmarshal JSON data from stub")
@@ -318,8 +323,7 @@ func (t *SimpleChaincode) createOrUpdateAsset(stub shim.ChaincodeStubInterface, 
     }
     stateJSON, err := json.Marshal(stateStub)
     if err != nil {
-        return nil, errors.New("Marshal failed for contract state" + fmt.Sprint(err))
-    }
+        return nil, errors.New("Marshal failed for contract state" + fmt.Sprint(err))    }
     // Get existing state from the stub
     
   
