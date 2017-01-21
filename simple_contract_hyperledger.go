@@ -322,6 +322,7 @@ func (t *SimpleChaincode) createOrUpdateAsset(stub shim.ChaincodeStubInterface, 
         }
     }
     stateJSON, err := json.Marshal(stateStub)
+     fmt.Println("stateJSON inside createOrUpdateAsset---updaet scenario-Marshal----",stateJSON);
     if err != nil {
         return nil, errors.New("Marshal failed for contract state" + fmt.Sprint(err))    }
     // Get existing state from the stub
@@ -329,6 +330,7 @@ func (t *SimpleChaincode) createOrUpdateAsset(stub shim.ChaincodeStubInterface, 
   
     // Write the new state to the ledger
     err = stub.PutState(assetID, stateJSON)
+     fmt.Println("putstate stateJSON in createOrUpdateAsset-------",stateJSON);
     if err != nil {
         err = errors.New("PUT ledger state failed: "+ fmt.Sprint(err))            
         return nil, err
