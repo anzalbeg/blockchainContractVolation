@@ -34,6 +34,9 @@ import (
     "fmt"
     "strings"
      "reflect"
+     "net/http"
+     "bytes"
+     "io/ioutil"
     "github.com/hyperledger/fabric/core/chaincode/shim"
 )
 
@@ -307,7 +310,7 @@ func (t *SimpleChaincode) createOrUpdateAsset(stub shim.ChaincodeStubInterface, 
            fmt.Println("stateStub inside createOrUpdateAsset--------",stateStub);
     } else {
         // This is an update scenario
-        fmt.Println("assetBytes inside createOrUpdateAsset---updaet scenario-----",assetBytes);
+        fmt.Println("assetBytes inside createOrUpdateAsset---updaet scenario-----",string(assetBytes));
         err = json.Unmarshal(assetBytes, &stateStub)
         if err != nil {
             err = errors.New("Unable to unmarshal JSON data from stub")
@@ -322,15 +325,18 @@ func (t *SimpleChaincode) createOrUpdateAsset(stub shim.ChaincodeStubInterface, 
         }
     }
     stateJSON, err := json.Marshal(stateStub)
-     fmt.Println("stateJSON inside createOrUpdateAsset---updaet scenario-Marshal----",stateJSON);
+     fmt.Println("stateJSON inside createOrUpdateAsset---updaet scenario-Marshal----",string(stateJSON));
     if err != nil {
         return nil, errors.New("Marshal failed for contract state" + fmt.Sprint(err))    }
     // Get existing state from the stub
-    
-  
+
+
+    // post called
+   jsonString :=getcurrentKitOwner()
+	fmt.Println("----------------------",jsonString)
     // Write the new state to the ledger
     err = stub.PutState(assetID, stateJSON)
-     fmt.Println("putstate stateJSON in createOrUpdateAsset-------",stateJSON);
+     fmt.Println("putstate stateJSON in createOrUpdateAsset-------",string(stateJSON));
     if err != nil {
         err = errors.New("PUT ledger state failed: "+ fmt.Sprint(err))            
         return nil, err
@@ -351,3 +357,41 @@ func (t *SimpleChaincode) createOrUpdateAsset(stub shim.ChaincodeStubInterface, 
     }
     return oldState, nil
  }
+
+                      
+func getcurrentKitOwner() string {
+	url := "https://793cb172013249b186340bdc2b077bbf-vp1.us.blockchain.ibm.com:5002/chaincode"
+	fmt.Println("URL getcurrentKitOwner---:>", url)
+
+	var jsonStr = []byte(`{"jsonrpc": "2.0",
+                                                "method": "query",
+                                                "params": {
+                                                    "type": 1,
+                                                    "chaincodeID": {
+                                                    "name": "7365f5eaf18fef0e63bf991377979b6543d1cc8abe4942b0cb954bf2d9d2201d514662f63b0c6acbd678856e4fd1fd5c626c554224a7f7d3c5fa8e7bf144a0b0"
+                                                    },
+                                                    "ctorMsg": {
+                                                    "function": "readAsset",
+                                                    "args": ["{\"assetID\":\"KIT10009\"}"]
+                                                    },
+                                                    "secureContext": "user_type1_1"
+                                                },
+                                                "id": 1
+                                                }`)
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
+	req.Header.Set("X-Custom-Header", "myvalue")
+	req.Header.Set("Content-Type", "application/json")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		panic(err)
+	}
+	defer resp.Body.Close()
+
+	fmt.Println(" getcurrentKitOwner----response Status:", resp.Status)
+	fmt.Println(" getcurrentKitOwner ----response Headers:", resp.Header)
+	body, _ := ioutil.ReadAll(resp.Body)
+	fmt.Println("getcurrentKitOwner-------response Body:", body)
+	return string(body)
+}
