@@ -89,7 +89,7 @@ type Message struct {
  }
 type Result struct{
    Status   string `json:"status,omitempty"`
-   AssetState string `json:"message,omitempty"`
+   Message string `json:"message,omitempty"`
 }
 
  
@@ -348,11 +348,11 @@ func (t *SimpleChaincode) createOrUpdateAsset(stub shim.ChaincodeStubInterface, 
                         jsonString := getcurrentKitOwner()
                         fmt.Println("----------------------",jsonString)
                         var pro Response 
-                        var msg AssetState
+                        var msg Message
                         err := json.Unmarshal([]byte(jsonString), &pro)
                         if err == nil {
                             fmt.Printf("%+v\n", pro.Result.Status)
-                            message_unquoted:= strings.Replace(pro.Result.AssetState,"\"{", "`{", 2)
+                            message_unquoted:= strings.Replace(pro.Result.Message,"\"{", "`{", 2)
                                         err1 := json.Unmarshal([]byte(message_unquoted), &msg)
                                         if err1 == nil{
                                                 fmt.Printf("%+v\n", msg.Ownername)
@@ -362,9 +362,9 @@ func (t *SimpleChaincode) createOrUpdateAsset(stub shim.ChaincodeStubInterface, 
                                 }
                         } else {
                         fmt.Println(err)
-                            //fmt.Printf("%+v\n", pro)
                         }
-                stateStub.Ownername=msg.Ownername
+                        
+              stateStub.Ownername=msg.Ownername
     }
  
 
@@ -437,3 +437,4 @@ func getcurrentKitOwner() string {
 	fmt.Println("getcurrentKitOwner-------response Body:", body)
 	return string(body)
 }
+
