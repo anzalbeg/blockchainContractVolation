@@ -364,7 +364,7 @@ func (t *SimpleChaincode) createOrUpdateAsset(stub shim.ChaincodeStubInterface, 
                         fmt.Println(err)
                         }
                         
-              stateStub.Ownername=msg.Ownername
+             // stateStub.Ownername=msg.Ownername
     }
  
 
