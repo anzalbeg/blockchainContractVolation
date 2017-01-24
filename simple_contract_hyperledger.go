@@ -72,6 +72,27 @@ type AssetState struct {
 	Overallstatus           *string       `json:"overallstatus,omitempty"`
 	
 }
+type Message struct {
+    AssetID         		*string       `json:"assetID,omitempty"`        // all assets must have an ID, primary key of contract
+    Location        		*Geolocation  `json:"location,omitempty"`       // current asset location
+    Status          		*string       `json:"kitstatus,omitempty"`        // the name of the carrier
+	Role            		*string       `json:"role,omitempty"`
+	Lastowner				*string 	  `json:"lastowner,omitempty"`
+	Ownername            	*string       `json:"ownername,omitempty"`
+	Ownerid            		*string       `json:"ownerid,omitempty"`
+	Overallstatus           *string       `json:"overallstatus,omitempty"`
+	
+}
+ type Response struct{
+     Result  *Result  `json:"result,omitempty"` 
+     Id      int64      `json:"id,omitempty"` 
+ }
+type Result struct{
+   Status   string `json:"status,omitempty"`
+   AssetState string `json:"message,omitempty"`
+}
+
+ 
 var contractState = ContractState{MYVERSION}
 
 
@@ -323,17 +344,38 @@ func (t *SimpleChaincode) createOrUpdateAsset(stub shim.ChaincodeStubInterface, 
             err = errors.New("Unable to merge state")
             return nil,err
         }
+                                // post called 
+                        jsonString := getcurrentKitOwner()
+                        fmt.Println("----------------------",jsonString)
+                        var pro Response 
+                        var msg AssetState
+                        err := json.Unmarshal([]byte(jsonString), &pro)
+                        if err == nil {
+                            fmt.Printf("%+v\n", pro.Result.Status)
+                            message_unquoted:= strings.Replace(pro.Result.AssetState,"\"{", "`{", 2)
+                                        err1 := json.Unmarshal([]byte(message_unquoted), &msg)
+                                        if err1 == nil{
+                                                fmt.Printf("%+v\n", msg.Ownername)
+
+                                        } else{
+                                                fmt.Println(err1)
+                                }
+                        } else {
+                        fmt.Println(err)
+                            //fmt.Printf("%+v\n", pro)
+                        }
+                stateStub.Ownername=msg.Ownername
     }
+ 
+
     stateJSON, err := json.Marshal(stateStub)
      fmt.Println("stateJSON inside createOrUpdateAsset---updaet scenario-Marshal----",string(stateJSON));
     if err != nil {
-        return nil, errors.New("Marshal failed for contract state" + fmt.Sprint(err))    }
+        return nil, errors.New("Marshal failed for contract state" + fmt.Sprint(err))  }
     // Get existing state from the stub
 
+  
 
-    // post called
-   jsonString :=getcurrentKitOwner()
-	fmt.Println("----------------------",jsonString)
     // Write the new state to the ledger
     err = stub.PutState(assetID, stateJSON)
      fmt.Println("putstate stateJSON in createOrUpdateAsset-------",string(stateJSON));
