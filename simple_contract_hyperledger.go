@@ -161,7 +161,6 @@ func (t *SimpleChaincode) createAsset(stub shim.ChaincodeStubInterface, args []s
 
 func (t *SimpleChaincode) updateAsset(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
      _,erval:=t. createOrUpdateAsset(stub, args)
-      fmt.Println("UpdateAsset method called ------->>>>>>", erval);
     return nil, erval
 }
 
@@ -292,11 +291,9 @@ func (t *SimpleChaincode) createOrUpdateAsset(stub shim.ChaincodeStubInterface, 
 
     stateIn, err = t.validateInput(args)
     if err != nil {
-        fmt.Println("error validateInput inside createOrUpdateAsset------",err);
         return nil, err
     }
     assetID = *stateIn.AssetID
-    fmt.Println("assetId inside createOrUpdateAsset------",assetID);
 	
     // Partial updates introduced here
     // Check if asset record existed in stub
@@ -304,10 +301,8 @@ func (t *SimpleChaincode) createOrUpdateAsset(stub shim.ChaincodeStubInterface, 
     if err != nil || len(assetBytes)==0{
         // This implies that this is a 'create' scenario
          stateStub = stateIn // The record that goes into the stub is the one that cme in
-           fmt.Println("stateStub inside createOrUpdateAsset--------",stateStub);
     } else {
         // This is an update scenario
-        fmt.Println("assetBytes inside createOrUpdateAsset---updaet scenario-----",string(assetBytes));
         err = json.Unmarshal(assetBytes, &stateStub)
         if err != nil {
             err = errors.New("Unable to unmarshal JSON data from stub")
@@ -322,15 +317,14 @@ func (t *SimpleChaincode) createOrUpdateAsset(stub shim.ChaincodeStubInterface, 
         }
     }
     stateJSON, err := json.Marshal(stateStub)
-     fmt.Println("stateJSON inside createOrUpdateAsset---updaet scenario-Marshal----",string(stateJSON));
     if err != nil {
-        return nil, errors.New("Marshal failed for contract state" + fmt.Sprint(err))    }
+        return nil, errors.New("Marshal failed for contract state" + fmt.Sprint(err))
+    }
     // Get existing state from the stub
     
   
     // Write the new state to the ledger
     err = stub.PutState(assetID, stateJSON)
-     fmt.Println("stateJSON inside createOrUpdateAsset---updaet scenario-Marshal----",string(stateJSON));
     if err != nil {
         err = errors.New("PUT ledger state failed: "+ fmt.Sprint(err))            
         return nil, err
