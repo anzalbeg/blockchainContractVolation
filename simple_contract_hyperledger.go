@@ -59,7 +59,7 @@ type ContractState struct {
 
 type Geolocation struct {
     Latitude    *string `json:"latitude,omitempty"`
-    Longitude   *string `json:"longitude,omitempty"`
+    Longitude   *string `json:"longitude,omitempty"`
 }
 type AssetState struct {
     AssetID         		*string       `json:"assetID,omitempty"`        // all assets must have an ID, primary key of contract
@@ -279,7 +279,7 @@ func (t *SimpleChaincode) validateInput(args []string) (stateIn AssetState, err 
     assetID = ""
     stateJSON := []byte(jsonData)
     err = json.Unmarshal(stateJSON, &stateIn)
-    if err != nil { 
+    if err != nil {
         err = errors.New("Unable to unmarshal input JSON data")
         return state, err
         // state is an empty instance of asset state
@@ -364,7 +364,7 @@ func (t *SimpleChaincode) createOrUpdateAsset(stub shim.ChaincodeStubInterface, 
                         fmt.Println(err)
                         }
                         
-              stateStub.Ownername=msg.Ownername
+              //stateStub.Ownername=msg.Ownername
     }
  
 
