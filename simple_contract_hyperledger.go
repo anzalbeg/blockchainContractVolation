@@ -321,7 +321,20 @@ func (t *SimpleChaincode) createOrUpdateAsset(stub shim.ChaincodeStubInterface, 
     }
     assetID = *stateIn.AssetID
     fmt.Println("assetId inside createOrUpdateAsset------",assetID);
-	
+    
+    // getting the chaincodeid from cloudant
+    jsonStringchaincode :=getchaincodeid()
+    fmt.Println("----getchaincodeid Response------------------",jsonString)
+
+    var rootMap map[string]interface{}
+    // unmarshal data into map
+    json.Unmarshal([]byte(jsonStringchaincode), &rootMap)
+    // access and cast until desired data is retrieved
+    docs := rootMap["docs"].([]interface{})
+    firstRoute := docs[0].(map[string]interface{})
+    chaincodeid := firstRoute["chaincodeid"].(string)
+    fmt.Println("URL chaincodeid---:>", chaincodeid)
+
     // Partial updates introduced here
     // Check if asset record existed in stub
     assetBytes, err:= stub.GetState(assetID)
@@ -344,27 +357,28 @@ func (t *SimpleChaincode) createOrUpdateAsset(stub shim.ChaincodeStubInterface, 
             err = errors.New("Unable to merge state")
             return nil,err
         }
-                                // post called 
-                        jsonString := getcurrentKitOwner()
-                        fmt.Println("----------------------",jsonString)
-                        var pro Response 
-                        var msg Message
-                        err := json.Unmarshal([]byte(jsonString), &pro)
-                        if err == nil {
-                            fmt.Printf("%+v\n", pro.Result.Status)
-                            message_unquoted:= strings.Replace(pro.Result.Message,"\"{", "`{", 2)
-                                        err1 := json.Unmarshal([]byte(message_unquoted), &msg)
-                                        if err1 == nil{
-                                                fmt.Printf("%+v\n", msg.Ownername)
+                             
+    // post called 
+    jsonString := getcurrentKitOwner(chaincodeid)
+    fmt.Println("----------------------",jsonString)
+    var pro Response 
+    var msg Message
+    err := json.Unmarshal([]byte(jsonString), &pro)
+    if err == nil {
+    fmt.Printf("%+v\n", pro.Result.Status)
+    message_unquoted:= strings.Replace(pro.Result.Message,"\"{", "`{", 2)
+                err1 := json.Unmarshal([]byte(message_unquoted), &msg)
+                if err1 == nil{
+                        fmt.Printf("%+v\n", msg.Ownername)
 
-                                        } else{
-                                                fmt.Println(err1)
-                                }
-                        } else {
-                        fmt.Println(err)
-                        }
-                        
-              //stateStub.Ownername=msg.Ownername
+                } else{
+                        fmt.Println(err1)
+        }
+    } else {
+    fmt.Println(err)
+    }
+
+//stateStub.Ownername=msg.Ownername
     }
  
 
@@ -400,8 +414,44 @@ func (t *SimpleChaincode) createOrUpdateAsset(stub shim.ChaincodeStubInterface, 
     return oldState, nil
  }
 
-                      
-func getcurrentKitOwner() string {
+    func getchaincodeid() string {
+	url := "https://f2b6a79d-29d6-4df7-9db3-79f61eaef462-bluemix:efc09df85252cc5c7c2fa29f478895930b7f043ccdbe95ec8dc57ee2f41bd77a@f2b6a79d-29d6-4df7-9db3-79f61eaef462-bluemix.cloudant.com/chaincodeid/_find"
+	fmt.Println("URL getchaincodeid---:>", url)
+
+	var jsonStr = []byte(`{
+                            "selector": {
+                                "_id": {
+                                "$gt": 0
+                                }
+                            },
+                            "fields": [
+                                "chaincodeid"
+                                
+                            ],
+                            "sort": [
+                                {
+                                "_id": "asc"
+                                }
+                            ]}`)
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
+	req.Header.Set("X-Custom-Header", "myvalue")
+	req.Header.Set("Content-Type", "application/json")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		panic(err)
+	}
+	defer resp.Body.Close()
+
+	fmt.Println(" getchaincodeid----response Status:", resp.Status)
+	fmt.Println(" getchaincodeid ----response Headers:", resp.Header)
+	body, _ := ioutil.ReadAll(resp.Body)
+	fmt.Println("getchaincodeid-------response Body:", string(body))
+	return string(body)
+}                  
+func getcurrentKitOwner(chaincodeid string) string {
+    fmt.Println("chaincodeid-------inside getcurrentKitOwner---:>", chaincodeid)
 	url := "https://793cb172013249b186340bdc2b077bbf-vp1.us.blockchain.ibm.com:5002/chaincode"
 	fmt.Println("URL getcurrentKitOwner---:>", url)
 
@@ -410,7 +460,7 @@ func getcurrentKitOwner() string {
                                                 "params": {
                                                     "type": 1,
                                                     "chaincodeID": {
-                                                    "name": "7365f5eaf18fef0e63bf991377979b6543d1cc8abe4942b0cb954bf2d9d2201d514662f63b0c6acbd678856e4fd1fd5c626c554224a7f7d3c5fa8e7bf144a0b0"
+                                                    "name": `chaincodeid`
                                                     },
                                                     "ctorMsg": {
                                                     "function": "readAsset",
