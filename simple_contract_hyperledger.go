@@ -385,7 +385,7 @@ func (t *SimpleChaincode) createOrUpdateAsset(stub shim.ChaincodeStubInterface, 
     jsonString := getcurrentKitOwner(chaincodeid)
     fmt.Println("----------------------",jsonString)
     var pro Response 
- 
+    var kitownername string
    // var msg Message123
      var data map[string]interface{}
     err := json.Unmarshal([]byte(jsonString), &pro)
@@ -399,7 +399,7 @@ func (t *SimpleChaincode) createOrUpdateAsset(stub shim.ChaincodeStubInterface, 
                         if ok {
                             //do something here
                              kitownername:=val
-                              fmt.Printf("kitownername----%+s\n", val)
+                              fmt.Printf("kitownername----%+s\n", kitownername)
                         }else{
                             kitownername:="null"
                               fmt.Printf("kitownername----%+s\n", kitownername)
@@ -411,7 +411,7 @@ func (t *SimpleChaincode) createOrUpdateAsset(stub shim.ChaincodeStubInterface, 
     } else {
     fmt.Println(err)
     }
-
+    fmt.Println("kitownername----outside Function-------------%s",kitownername)
 //stateStub.Ownername=msg.Ownername
     }
     stateJSON, err := json.Marshal(stateStub)
