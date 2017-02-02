@@ -385,16 +385,26 @@ func (t *SimpleChaincode) createOrUpdateAsset(stub shim.ChaincodeStubInterface, 
     jsonString := getcurrentKitOwner(chaincodeid)
     fmt.Println("----------------------",jsonString)
     var pro Response 
-    var msg Message123
+ 
+   // var msg Message123
+     var data map[string]interface{}
     err := json.Unmarshal([]byte(jsonString), &pro)
     if err == nil {
     fmt.Printf("%+v\n", pro.Result.Status)
     message_unquoted:= strings.Replace(pro.Result.Message,"\"{", "`{", 2)
-    fmt.Printf("message_unquoted-------%+v\n", string(message_unquoted))
-                err1 := json.Unmarshal([]byte(message_unquoted), &msg)
+    fmt.Printf("message_unquoted-------%+s\n", string(message_unquoted))
+                err1 := json.Unmarshal([]byte(message_unquoted), &data)
                 if err1 == nil{
-                        fmt.Printf("%+v\n", msg.Ownername)
-
+                        val, ok := data["ownername"]
+                        if ok {
+                            //do something here
+                             kitownername:=data["ownername"]
+                              fmt.Printf("kitownername----%+s\n", kitownername)
+                        }else{
+                            kitownername:="null"
+                              fmt.Printf("kitownername----%+s\n", kitownername)
+                        }
+                       
                 } else{
                         fmt.Println(err1)
         }
