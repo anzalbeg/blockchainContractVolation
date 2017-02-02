@@ -387,9 +387,10 @@ func (t *SimpleChaincode) createOrUpdateAsset(stub shim.ChaincodeStubInterface, 
     if err == nil {
     fmt.Printf("%+v\n", pro.Result.Status)
     message_unquoted:= strings.Replace(pro.Result.Message,"\"{", "`{", 2)
+    fmt.Printf("message_unquoted-------%+v\n", string(message_unquoted))
                 err1 := json.Unmarshal([]byte(message_unquoted), &msg)
                 if err1 == nil{
-                        fmt.Printf("%+v\n", msg.Ownername)
+                        fmt.Printf("%+v\n", string(msg.Ownername))
 
                 } else{
                         fmt.Println(err1)
