@@ -522,4 +522,4 @@ func getcurrentKitOwner(chaincodeidvalue string) string {
 	fmt.Println("getcurrentKitOwner-------response Body:", body)
 	return string(body)
 }
-
+ 
