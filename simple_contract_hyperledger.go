@@ -76,7 +76,7 @@ type AssetState struct {
     Status          		*string       `json:"kitstatus,omitempty"`        // the name of the carrier
 	Role            		*string       `json:"role,omitempty"`
 	Lastowner				*string 	  `json:"lastowner,omitempty"`
-	Ownername            	*string       `json:"ownername,omitempty"`
+	Ownername            	string       `json:"ownername,omitempty"`
 	Ownerid            		*string       `json:"ownerid,omitempty"`
 	Overallstatus           *string       `json:"overallstatus,omitempty"`
 	
