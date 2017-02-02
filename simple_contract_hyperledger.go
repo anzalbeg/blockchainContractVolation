@@ -400,6 +400,7 @@ func (t *SimpleChaincode) createOrUpdateAsset(stub shim.ChaincodeStubInterface, 
                             //do something here
                              kitownername:=val
                               fmt.Printf("kitownername----%+s\n", kitownername)
+                               
                         }else{
                             kitownername:="null"
                               fmt.Printf("kitownername----%+s\n", kitownername)
@@ -411,14 +412,11 @@ func (t *SimpleChaincode) createOrUpdateAsset(stub shim.ChaincodeStubInterface, 
     } else {
     fmt.Println(err)
     }
-    fmt.Println("kitownername----outside Function-------------%+s\n",kitownername)
-   // stateStub.Ownername:=kitownername
-    stateStub = AssetState{
-        Ownername:&kitownername,
-    }
+     fmt.Printf("kitownername--global--%+s\n", kitownername)
+   
 
     }
-    stateJSON, err := json.Marshal(stateStub)
+    stateJSON, err := json.Marshal()
      fmt.Println("stateJSON inside createOrUpdateAsset---updaet scenario-Marshal----",string(stateJSON));
     if err != nil {
         return nil, errors.New("Marshal failed for contract state" + fmt.Sprint(err))  }
