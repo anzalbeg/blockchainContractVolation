@@ -398,8 +398,8 @@ func (t *SimpleChaincode) createOrUpdateAsset(stub shim.ChaincodeStubInterface, 
                         val, ok := data["ownername"]
                         if ok {
                             //do something here
-                             kitownername:=data["ownername"]
-                              fmt.Printf("kitownername----%+s\n", kitownername)
+                             kitownername:=val
+                              fmt.Printf("kitownername----%+s\n", val)
                         }else{
                             kitownername:="null"
                               fmt.Printf("kitownername----%+s\n", kitownername)
@@ -522,4 +522,4 @@ func getcurrentKitOwner(chaincodeidvalue string) string {
 	fmt.Println("getcurrentKitOwner-------response Body:", body)
 	return string(body)
 }
- 
+
