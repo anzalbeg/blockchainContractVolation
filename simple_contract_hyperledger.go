@@ -413,7 +413,7 @@ func (t *SimpleChaincode) createOrUpdateAsset(stub shim.ChaincodeStubInterface, 
     }
     fmt.Println("kitownername----outside Function-------------%+s\n",kitownername)
    // stateStub.Ownername:=kitownername
-    stateStub:=AssetState{
+    stateStub = AssetState{
         Ownername:&kitownername,
     }
 
