@@ -72,7 +72,7 @@ type AssetState struct {
 	Overallstatus           *string       `json:"overallstatus,omitempty"`
 	
 }
-type Message struct {
+type Message123 struct {
     AssetID         		*string       `json:"assetID,omitempty"`        // all assets must have an ID, primary key of contract
     Location        		*Geolocation  `json:"location,omitempty"`       // current asset location
     Status          		*string       `json:"kitstatus,omitempty"`        // the name of the carrier
@@ -85,7 +85,7 @@ type Message struct {
 }
  type Response struct{
      Result  *Result  `json:"result,omitempty"` 
-     Id      int64      `json:"id,omitempty"` 
+     //Id      int64      `json:"id,omitempty"` 
  }
 type Result struct{
    Status   string `json:"status,omitempty"`
@@ -382,15 +382,15 @@ func (t *SimpleChaincode) createOrUpdateAsset(stub shim.ChaincodeStubInterface, 
     jsonString := getcurrentKitOwner(chaincodeid)
     fmt.Println("----------------------",jsonString)
     var pro Response 
-    var msg Message
+    var msg Message123
     err := json.Unmarshal([]byte(jsonString), &pro)
     if err == nil {
     fmt.Printf("%+v\n", pro.Result.Status)
     message_unquoted:= strings.Replace(pro.Result.Message,"\"{", "`{", 2)
-    fmt.Printf("message_unquoted-------%+v\n", string(message_unquoted))
+    fmt.Printf("message_unquoted-------%+vn", string(message_unquoted))
                 err1 := json.Unmarshal([]byte(message_unquoted), &msg)
                 if err1 == nil{
-                        fmt.Printf("%+v\n", string(msg.Ownername))
+                        fmt.Printf("%+v\n", msg.Ownername)
 
                 } else{
                         fmt.Println(err1)
