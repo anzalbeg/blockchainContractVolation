@@ -76,7 +76,7 @@ type AssetState struct {
     Status          		*string       `json:"kitstatus,omitempty"`        // the name of the carrier
 	Role            		*string       `json:"role,omitempty"`
 	Lastowner				*string 	  `json:"lastowner,omitempty"`
-	Ownername            	string       `json:"ownername,omitempty"`
+	Ownername            	*string       `json:"ownername,omitempty"`
 	Ownerid            		*string       `json:"ownerid,omitempty"`
 	Overallstatus           *string       `json:"overallstatus,omitempty"`
 	
@@ -412,7 +412,11 @@ func (t *SimpleChaincode) createOrUpdateAsset(stub shim.ChaincodeStubInterface, 
     fmt.Println(err)
     }
     fmt.Println("kitownername----outside Function-------------%+s\n",kitownername)
-   stateStub.Ownername=kitownername
+   // stateStub.Ownername:=kitownername
+    stateStub:=AssetState{
+        Ownername:&kitownername,
+    }
+
     }
     stateJSON, err := json.Marshal(stateStub)
      fmt.Println("stateJSON inside createOrUpdateAsset---updaet scenario-Marshal----",string(stateJSON));
