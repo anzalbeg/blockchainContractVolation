@@ -79,8 +79,8 @@ type AssetState struct {
 	Ownername            	*string       `json:"ownername,omitempty"`
 	Ownerid            		*string       `json:"ownerid,omitempty"`
 	Overallstatus           *string       `json:"overallstatus,omitempty"`
-    AlertType                *string       `json:"alerttype,omitempty"`
-    Alert                    *string       `json:"alert,omitempty"`
+    AlertType                string       `json:"alerttype,omitempty"`
+    Alert                    string       `json:"alert,omitempty"`
 
 	
 }
@@ -345,7 +345,7 @@ func (t *SimpleChaincode) createOrUpdateAsset(stub shim.ChaincodeStubInterface, 
         fmt.Println("error validateInput inside createOrUpdateAsset------",err);
         return nil, err
     }
-     fmt.Println("stateIn inside createOrUpdateAsset------",string(stateIn));
+    // fmt.Println("stateIn inside createOrUpdateAsset------",string(stateIn));
     assetID = *stateIn.AssetID
     fmt.Println("assetId inside createOrUpdateAsset------",assetID);
     
@@ -379,7 +379,7 @@ func (t *SimpleChaincode) createOrUpdateAsset(stub shim.ChaincodeStubInterface, 
         }
                              
     // post called 
-    jsonString := getcurrentKitOwner(chaincodeid)
+    jsonString := getcurrentKitOwner(jsonStringchaincode)
     fmt.Println("----------------------",jsonString)
     var pro Response 
     var kitownername string
