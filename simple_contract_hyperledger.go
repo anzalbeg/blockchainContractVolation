@@ -79,8 +79,8 @@ type AssetState struct {
 	Ownername            	*string       `json:"ownername,omitempty"`
 	Ownerid            		*string       `json:"ownerid,omitempty"`
 	Overallstatus           *string       `json:"overallstatus,omitempty"`
-    AlertType                string       `json:"alerttype,omitempty"`
-    Alert                    string       `json:"alert,omitempty"`
+    AlertType               *string       `json:"alerttype,omitempty"`
+    Alert                   *string       `json:"alert,omitempty"`
 
 	
 }
