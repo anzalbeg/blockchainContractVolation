@@ -139,6 +139,7 @@ func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface, function string
         return nil, errors.New("Contract version " + MYVERSION + " must match version argument: " + stateArg.Version)
     }
     contractStateJSON, err := json.Marshal(stateArg)
+    fmt.Println("contractStateJSON--------%+s\n",contractStateJSON)
     if err != nil {
         return nil, errors.New("Marshal failed for contract state" + fmt.Sprint(err))
     }
