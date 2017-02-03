@@ -351,11 +351,11 @@ func (t *SimpleChaincode) createOrUpdateAsset(stub shim.ChaincodeStubInterface, 
     fmt.Println("assetId inside createOrUpdateAsset------",assetID);
     
     // getting the chaincodeid from cloudant
-    jsonStringchaincode :=getchaincodeid()
-    fmt.Println("----getchaincodeid Response------------------",jsonStringchaincode)
-
+   jsonStringchaincode :=getchaincodeid()
+    //fmt.Println("----getchaincodeid Response------------------",jsonStringchaincode)
+                
    
-
+     
     // Partial updates introduced here
     // Check if asset record existed in stub
     assetBytes, err:= stub.GetState(assetID)
@@ -412,8 +412,8 @@ func (t *SimpleChaincode) createOrUpdateAsset(stub shim.ChaincodeStubInterface, 
     }
      fmt.Printf("kitownername--global--%+s\n", kitownername)
     }
-
-    stateStub.AlertType="tempered"
+    var name string="Anzal Beg"
+    stateStub.Ownername=&name
     stateJSON, err := json.Marshal(stateStub)
      fmt.Println("stateJSON inside createOrUpdateAsset---updaet scenario-Marshal----",string(stateJSON));
     if err != nil {
