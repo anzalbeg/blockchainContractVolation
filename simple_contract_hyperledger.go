@@ -79,6 +79,9 @@ type AssetState struct {
 	Ownername            	*string       `json:"ownername,omitempty"`
 	Ownerid            		*string       `json:"ownerid,omitempty"`
 	Overallstatus           *string       `json:"overallstatus,omitempty"`
+    AlertType                *string       `json:"alerttype,omitempty"`
+    Alert                    *string       `json:"alert,omitempty"`
+
 	
 }
 type Message123 struct {
@@ -342,6 +345,7 @@ func (t *SimpleChaincode) createOrUpdateAsset(stub shim.ChaincodeStubInterface, 
         fmt.Println("error validateInput inside createOrUpdateAsset------",err);
         return nil, err
     }
+     fmt.Println("stateIn inside createOrUpdateAsset------",string(stateIn));
     assetID = *stateIn.AssetID
     fmt.Println("assetId inside createOrUpdateAsset------",assetID);
     
@@ -349,14 +353,7 @@ func (t *SimpleChaincode) createOrUpdateAsset(stub shim.ChaincodeStubInterface, 
     jsonStringchaincode :=getchaincodeid()
     fmt.Println("----getchaincodeid Response------------------",jsonStringchaincode)
 
-    var rootMap map[string]interface{}
-    // unmarshal data into map
-    json.Unmarshal([]byte(jsonStringchaincode), &rootMap)
-    // access and cast until desired data is retrieved
-    docs := rootMap["docs"].([]interface{})
-    firstRoute := docs[0].(map[string]interface{})
-    chaincodeid := firstRoute["chaincodeid"].(string)
-    fmt.Println("URL chaincodeid---:>", chaincodeid)
+   
 
     // Partial updates introduced here
     // Check if asset record existed in stub
@@ -413,9 +410,9 @@ func (t *SimpleChaincode) createOrUpdateAsset(stub shim.ChaincodeStubInterface, 
     fmt.Println(err)
     }
      fmt.Printf("kitownername--global--%+s\n", kitownername)
-   
-
     }
+
+    stateStub.AlertType="tempered"
     stateJSON, err := json.Marshal(stateStub)
      fmt.Println("stateJSON inside createOrUpdateAsset---updaet scenario-Marshal----",string(stateJSON));
     if err != nil {
@@ -482,7 +479,15 @@ func (t *SimpleChaincode) createOrUpdateAsset(stub shim.ChaincodeStubInterface, 
 	fmt.Println(" getchaincodeid ----response Headers:", resp.Header)
 	body, _ := ioutil.ReadAll(resp.Body)
 	fmt.Println("getchaincodeid-------response Body:", string(body))
-	return string(body)
+     var rootMap map[string]interface{}
+    // unmarshal data into map
+    json.Unmarshal([]byte(string(body)), &rootMap)
+    // access and cast until desired data is retrieved
+    docs := rootMap["docs"].([]interface{})
+    firstRoute := docs[0].(map[string]interface{})
+    chaincodeid := firstRoute["chaincodeid"].(string)
+    fmt.Println("URL chaincodeid---:>", chaincodeid)
+	return chaincodeid
 }                  
 func getcurrentKitOwner(chaincodeidvalue string) string {
     fmt.Println("chaincodeid-------inside getcurrentKitOwner---:>", chaincodeidvalue)
