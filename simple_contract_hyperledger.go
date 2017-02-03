@@ -412,8 +412,8 @@ func (t *SimpleChaincode) createOrUpdateAsset(stub shim.ChaincodeStubInterface, 
     }
      fmt.Printf("kitownername--global--%+s\n", kitownername)
     }
-    var name string="Anzal Beg"
-    stateStub.Ownername=&name
+   // var name string="Anzal Beg"
+    //stateStub.Ownername=&name
     stateJSON, err := json.Marshal(stateStub)
      fmt.Println("stateJSON inside createOrUpdateAsset---updaet scenario-Marshal----",string(stateJSON));
     if err != nil {
