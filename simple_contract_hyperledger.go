@@ -372,6 +372,8 @@ func (t *SimpleChaincode) createOrUpdateAsset(stub shim.ChaincodeStubInterface, 
             return nil, err
             // state is an empty instance of asset state
         }
+        var name string="Anzal Beg"
+        stateStub.Ownername=&name
           // Merge partial state updates
         stateStub, err =t.mergePartialState(stateStub,stateIn)
         if err != nil {
@@ -412,8 +414,8 @@ func (t *SimpleChaincode) createOrUpdateAsset(stub shim.ChaincodeStubInterface, 
     }
      fmt.Printf("kitownername--global--%+s\n", kitownername)
     }
-   // var name string="Anzal Beg"
-    //stateStub.Ownername=&name
+    var name string="Anzal Beg"
+        stateStub.Ownername=&name
     stateJSON, err := json.Marshal(stateStub)
      fmt.Println("stateJSON inside createOrUpdateAsset---updaet scenario-Marshal----",string(stateJSON));
     if err != nil {
