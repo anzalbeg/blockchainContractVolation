@@ -47,7 +47,7 @@ type SimpleChaincode struct {
 
 const CONTRACTSTATEKEY string = "ContractStateKey"  
 // store contract state - only version in this example
-const MYVERSION string = "1.0"
+const MYVERSION string = "2.0"
 
 // ************************************
 // asset and contract state 
